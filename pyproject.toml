@@ -1,7 +1,6 @@
 [tool.poetry]
 name = "laneatt-classproj"
 version = "0.1.0"
-package-mode = false
 description = ""
 authors = ["Your Name <you@example.com>"]
 
