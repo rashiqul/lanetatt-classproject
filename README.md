@@ -7,9 +7,9 @@ We re-implement a simplified version of **LaneATT** to study its architecture, h
 
 ## Setup
 
-### 1. Install Poetry
+### 1. Install Poetry 1.1.12
 ```bash
-curl -sSL https://install.python-poetry.org | python3 -
+curl -sSL https://install.python-poetry.org | POETRY_VERSION=1.1.12 python3 -
 export PATH="$HOME/.local/bin:$PATH"
 poetry --version
 ```
@@ -36,7 +36,7 @@ You should then see the LaneATT code under `external/LaneATT/`.
 
 ### 4. Install dependencies and activate the environment
 ```bash
-poetry install
+poetry install --no-root
 poetry shell
 ```
 
@@ -59,5 +59,5 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 ## Notes
 
 - Requires Python 3.10–3.14
-- Tested with Poetry and PyTorch 2.5.1
+- Tested with Poetry 1.1.12 and PyTorch 2.5.1
 - For reproducibility, all dependencies are defined in `pyproject.toml` and `poetry.lock`
