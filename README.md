@@ -20,13 +20,27 @@ git clone git@github.com:YOURUSER/laneatt-classproj.git
 cd laneatt-classproj
 ```
 
-### 3. Install dependencies and activate the environment
+### 3. Initialize the submodule
+Run these two commands once after cloning:
+
+```bash
+git submodule init
+git submodule update
+```
+
+That will:
+- Register the submodule
+- Check out the correct commit inside `external/LaneATT`
+
+You should then see the LaneATT code under `external/LaneATT/`.
+
+### 4. Install dependencies and activate the environment
 ```bash
 poetry install
 poetry shell
 ```
 
-### 4. Verify installation
+### 5. Verify installation
 ```bash
 python -c "import torch, torchvision, numpy, cv2; print(torch.__version__, torchvision.__version__, numpy.__version__, cv2.__version__)"
 ```
