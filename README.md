@@ -1,4 +1,4 @@
-# CD543 / ECE549 Final Project — Attention-Guided Lane Detection
+# CS543 / ECE549 Final Project — Attention-Guided Lane Detection
 
 This repository contains our final project for **CD543/ECE549 (Computer Vision)**.  
 We re-implement a simplified version of **LaneATT** to study its architecture, hyperparameters, and performance on small subsets of TuSimple or CULane datasets.
