@@ -1,3 +1,7 @@
+# NOTE: This config is for class project.
+# Actual training script will be called from external/LaneATT
+# once we hook it up.
+
 datasets:
   tusimple: ./data/tusimple
   culane: ./data/culane

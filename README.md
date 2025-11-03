@@ -56,6 +56,20 @@ pip install --upgrade --index-url https://download.pytorch.org/whl/cu121 torch==
 python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 ```
 
+## 📁 Configs
+
+All project configs live under `configs/`.
+
+- `paths.example.yaml` – template for where datasets live locally.  
+- `tusimple_debug.yaml` – minimal setup for running small/quick experiments on TuSimple.
+- `culane_debug.yaml` – placeholder for CULane-style runs.
+
+**Note:** we are currently using `external/LaneATT` as a submodule. The idea is:
+1. set up `configs/paths.yaml`
+2. call the LaneATT training script from inside `external/LaneATT`
+3. pass in our config / override paths
+
+
 ## Notes
 
 - Requires Python 3.10–3.14

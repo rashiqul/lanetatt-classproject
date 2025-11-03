@@ -1,3 +1,7 @@
+# NOTE: This config is for class project.
+# Actual training script will be called from external/LaneATT
+# once we hook it up.
+
 dataset: tusimple
 paths: configs/paths.yaml
 
@@ -12,7 +16,7 @@ model:
   name: laneatt
   backbone: resnet34
   pretrained: true
-  
+
 log:
   out_dir: experiments/runs/tusimple_debug
   save_every: 1
