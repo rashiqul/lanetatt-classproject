@@ -155,30 +155,18 @@ def main() -> None:
 
     print(f"[INFO] Starting experiment: {exp_name}")
 
-    # TODO: Convert our config format to LaneATT's expected format
-    # For now, we'll create a minimal LaneATT-compatible config
-    # You'll need to map your config fields to LaneATT's expected structure
-
-    # NOTE: The actual implementation depends on LaneATT's config structure
-    # This is a placeholder showing the approach
-    print("[WARN] Config conversion not yet implemented.")
-    print("[WARN] You need to create a LaneATT-compatible YAML config in cfgs/")
-    print("[INFO] See external/LaneATT/cfgs/ for examples")
-
     # ========================================================================
-    # STEP 5: Alternative approach - Call main.py as subprocess
+    # STEP 5: Call LaneATT main.py as subprocess with 1k config
     # ========================================================================
-    # Since LaneATT's main.py expects CLI arguments, it's easier to call it
-    # as a subprocess for now
+    # Since LaneATT's main.py expects CLI arguments, we call it as a subprocess
 
     import subprocess
 
     # Path to LaneATT's main.py
     laneatt_main = LANEATT_ROOT / "main.py"
 
-    # You'll need to create a LaneATT-compatible config file
-    # For example: external/LaneATT/cfgs/laneatt_tusimple_resnet34.yml
-    laneatt_cfg = LANEATT_ROOT / "cfgs" / "laneatt_tusimple_resnet34.yml"
+    # Use the new 1k subset config
+    laneatt_cfg = LANEATT_ROOT / "cfgs" / "laneatt_tusimple_1k.yml"
 
     if not laneatt_cfg.exists():
         print(f"[ERROR] LaneATT config not found: {laneatt_cfg}")
@@ -186,9 +174,6 @@ def main() -> None:
         cfgs_dir = LANEATT_ROOT / "cfgs"
         for cfg_file in cfgs_dir.glob("*.yml"):
             print(f"  - {cfg_file.name}")
-        print("\n[INFO] Next steps:")
-        print("1. Choose or create a LaneATT config in external/LaneATT/cfgs/")
-        print("2. Or implement config conversion in this script")
         return
 
     # Build the command to run LaneATT's main.py
