@@ -1,0 +1,9 @@
+# Config for training on full TuSimple dataset using Bozhen's split
+dataset: tusimple
+log:
+  out_dir: experiments/runs/tusimple_full
+
+# This will be passed to LaneATT
+laneatt:
+  config: laneatt_tusimple_split_resnet18.yml
+  epochs: 100
