@@ -8,3 +8,9 @@ experiments/
 # OS/editor
 .DS_Store
 .vscode/
+data/
+experiments/runs/
+*.pt
+*.pth
+*.ckpt
+.notebooks/
