@@ -21,8 +21,8 @@ We use the **LaneATT** model to study lane detection on the TuSimple and CULane 
 ### 1. Clone the Repository
 
 ```bash
-git clone git@github.com:rashiqul/lanetatt-classproject.git
-cd lanetatt-classproject
+git clone git@github.com:rashiqul/laneatt-classproject.git
+cd laneatt-classproject
 ```
 
 ### 2. Initialize Git Submodules
