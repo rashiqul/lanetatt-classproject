@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "lanetatt-classproject"
+name = "laneatt-classproject"
 version = "0.1.0"
 description = "Lane detection class project"
 authors = ["Bozhen Zhou", "Larry Liao", "Manan Hitesh Masheswari", "Rashiqul Alam"]
