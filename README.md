@@ -672,9 +672,7 @@ If you use this code or our modifications in your research, please cite the orig
 
 ```bibtex
 @InProceedings{tabelini2021cvpr,
-  author    = {Lucas Tabelini and Rodrigo Berriel and Thiago M. Paix\~ao
-               and Claudine Badue and Alberto Ferreira De Souza
-               and Thiago Oliveira-Santos},
+  author    = {Lucas Tabelini and Rodrigo Berriel and Thiago M. Paix\~ao and Claudine Badue and Alberto Ferreira De Souza and Thiago Oliveira-Santos},
   title     = {{Keep your Eyes on the Lane: Real-time Attention-guided Lane Detection}},
   booktitle = {Conference on Computer Vision and Pattern Recognition (CVPR)},
   year      = {2021}
