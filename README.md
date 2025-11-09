@@ -175,6 +175,27 @@ See [`docs/datasets.md`](docs/datasets.md) for more details on TuSimple and CULa
 
 ---
 
+## Training with WandB Tracking 🚀
+
+Track your experiments with Weights & Biases just like [Bozhen's experiments](https://wandb.ai/bozhen2-uiuc/LaneATT-TuSimple)!
+
+### Quick Start with WandB
+
+```bash
+# First time: Login to WandB
+poetry run python -c "import wandb; wandb.login()"
+
+# Train with WandB tracking
+poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+
+# Run multiple experiments automatically
+./scripts/run_wandb_experiments.sh all
+```
+
+**See [`docs/wandb-experiments.md`](docs/wandb-experiments.md) for complete WandB guide.**
+
+---
+
 ## Training
 
 ### Quick Start
