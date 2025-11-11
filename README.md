@@ -113,22 +113,22 @@ CUDA available: True
 #### 1. Download the Dataset
 
 ```bash
-cd datasets
+# Create dataset directory inside LaneATT (where configs expect it)
+mkdir -p external/LaneATT/datasets
+cd external/LaneATT/datasets
 
 # Train & validation data (~10 GB)
-mkdir tusimple
 wget "https://s3.us-east-2.amazonaws.com/benchmark-frontend/datasets/1/train_set.zip"
 unzip train_set.zip -d tusimple
 
 # Test data (~10 GB)
-mkdir tusimple-test
 wget "https://s3.us-east-2.amazonaws.com/benchmark-frontend/datasets/1/test_set.zip"
 unzip test_set.zip -d tusimple-test
 
 # Test annotations
 wget "https://s3.us-east-2.amazonaws.com/benchmark-frontend/truth/1/test_label.json" -P tusimple-test/
 
-cd ..
+cd ../../..
 ```
 
 #### 2. Create Train/Validation Split
@@ -157,33 +157,58 @@ For quick prototyping, you can create a smaller subset:
 
 ```bash
 poetry run python src/create_subset_data.py \
-    --source-train datasets/tusimple \
-    --source-test datasets/tusimple-test \
-    --target-train datasets/tusimple-1k \
-    --target-test datasets/tusimple-test-1k \
+    --source-train external/LaneATT/datasets/tusimple \
+    --source-test external/LaneATT/datasets/tusimple-test \
+    --target-train external/LaneATT/datasets/tusimple-1k \
+    --target-test external/LaneATT/datasets/tusimple-test-1k \
     --num-train 1000 \
     --num-test 500
 ```
 
-This creates:
-- `datasets/tusimple-1k/` with 1,000 training images
-- `datasets/tusimple-test-1k/` with 500 test images
-
-Then update your config file to point to these smaller datasets.
+This creates smaller datasets inside `external/LaneATT/datasets/` for faster experimentation.
+Then update your LaneATT config file to point to these smaller datasets.
 
 ---
 
 ## Training
 
-### Two Ways to Execute LaneATT
+### Quick Start
 
-**Method 1: Class Project Wrapper** (Recommended)
+**Train a single model:**
 ```bash
-# Train with custom config and WandB support
-poetry run python src/train.py --config configs/tusimple_full.yaml [--wandb] [--epochs N]
+poetry run python src/train.py --config configs/tusimple_full.yaml
 ```
 
-**Method 2: Original LaneATT Entry Point** (Direct)
+**Train all ResNet models (18, 34, 122) sequentially:**
+```bash
+bash run_all_models.sh
+```
+
+### Execution Methods
+
+**Method 1: Class Project Wrapper** (Recommended for single models)
+```bash
+# Basic training
+poetry run python src/train.py --config configs/tusimple_full.yaml
+
+# With WandB logging
+poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+
+# Override epochs
+poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
+
+# Quick debug (2 epochs)
+poetry run python src/train.py --config configs/tusimple_debug.yaml
+```
+
+**Method 2: Batch Training** (For running all models overnight)
+```bash
+# Trains ResNet-18, ResNet-34, and ResNet-122 sequentially
+# Logs to training_logs/
+bash run_all_models.sh
+```
+
+**Method 3: Original LaneATT Entry Point** (Advanced/Direct access)
 ```bash
 cd external/LaneATT
 python main.py train --exp_name tusimple_resnet18 --cfg cfgs/laneatt_tusimple_resnet18.yml
@@ -191,18 +216,7 @@ python main.py test --exp_name tusimple_resnet18 --epoch 70
 cd ../..
 ```
 
-**Batch Training Multiple Models:**
-```bash
-bash run_all_models.sh  # Runs ResNet-18, 34, and 122 sequentially
-```
-
----
-
-## Training Details
-
-## Training Details
-
-### Quick Start Examples
+### Training Options
 
 Train on the full TuSimple dataset with the custom train/val split:
 
@@ -218,17 +232,12 @@ poetry run python src/train.py --config configs/tusimple_debug.yaml
 
 ### Training Options
 
-**Override epochs:**
+**WandB Integration:**
 ```bash
-poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
-```
-
-**Enable WandB logging:**
-```bash
-# First time: Login to WandB
+# First time only: Login to WandB
 poetry run python -c "import wandb; wandb.login()"
 
-# Train with tracking
+# Enable WandB logging during training
 poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
 ```
 
@@ -329,6 +338,7 @@ laneatt-classproject/
 │   ├── tusimple_debug.yaml    # Debug config (2 epochs)
 │   ├── culane_debug.yaml      # CULane debug config
 │   └── paths.yaml             # Dataset paths
+├── datasets/                  # Actual datasets (gitignored, ~20GB)
 │   ├── tusimple/              # Training data + train/val split
 │   │   ├── clips/             # Images organized by date
 │   │   ├── label_data_0313.json
@@ -357,6 +367,10 @@ laneatt-classproject/
 │       ├── experiments/       # Training checkpoints (gitignored)
 │       ├── tensorboard/       # TensorBoard logs (gitignored)
 │       └── wandb/             # WandB logs (gitignored)
+├── scripts/
+│   ├── clean_env.sh           # Clean and rebuild Poetry environment
+│   ├── run_wandb_experiments.sh  # Automated WandB experiments
+│   └── setup_wandb.sh         # WandB setup helper
 ├── src/
 │   ├── train.py               # ⭐ Training wrapper script
 │   └── create_subset_data.py  # ⭐ Create smaller dataset subsets
