@@ -171,34 +171,38 @@ This creates:
 
 Then update your config file to point to these smaller datasets.
 
-See [`docs/datasets.md`](docs/datasets.md) for more details on TuSimple and CULane datasets.
-
----
-
-## Training with WandB Tracking 🚀
-
-Track your experiments with Weights & Biases just like [Bozhen's experiments](https://wandb.ai/bozhen2-uiuc/LaneATT-TuSimple)!
-
-### Quick Start with WandB
-
-```bash
-# First time: Login to WandB
-poetry run python -c "import wandb; wandb.login()"
-
-# Train with WandB tracking
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
-
-# Run multiple experiments automatically
-./scripts/run_wandb_experiments.sh all
-```
-
-**See [`docs/wandb-experiments.md`](docs/wandb-experiments.md) for complete WandB guide.**
-
 ---
 
 ## Training
 
-### Quick Start
+### Two Ways to Execute LaneATT
+
+**Method 1: Class Project Wrapper** (Recommended)
+```bash
+# Train with custom config and WandB support
+poetry run python src/train.py --config configs/tusimple_full.yaml [--wandb] [--epochs N]
+```
+
+**Method 2: Original LaneATT Entry Point** (Direct)
+```bash
+cd external/LaneATT
+python main.py train --exp_name tusimple_resnet18 --cfg cfgs/laneatt_tusimple_resnet18.yml
+python main.py test --exp_name tusimple_resnet18 --epoch 70
+cd ../..
+```
+
+**Batch Training Multiple Models:**
+```bash
+bash run_all_models.sh  # Runs ResNet-18, 34, and 122 sequentially
+```
+
+---
+
+## Training Details
+
+## Training Details
+
+### Quick Start Examples
 
 Train on the full TuSimple dataset with the custom train/val split:
 
@@ -219,11 +223,14 @@ poetry run python src/train.py --config configs/tusimple_debug.yaml
 poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
 ```
 
-**Enable Weights & Biases logging:**
+**Enable WandB logging:**
 ```bash
+# First time: Login to WandB
+poetry run python -c "import wandb; wandb.login()"
+
+# Train with tracking
 poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
 ```
-(By default, WandB is disabled to avoid clutter during experiments)
 
 ### What Happens During Training
 
@@ -322,7 +329,6 @@ laneatt-classproject/
 │   ├── tusimple_debug.yaml    # Debug config (2 epochs)
 │   ├── culane_debug.yaml      # CULane debug config
 │   └── paths.yaml             # Dataset paths
-├── datasets/                   # Actual datasets (gitignored, ~20GB)
 │   ├── tusimple/              # Training data + train/val split
 │   │   ├── clips/             # Images organized by date
 │   │   ├── label_data_0313.json
@@ -334,8 +340,6 @@ laneatt-classproject/
 │       ├── clips/
 │       ├── test_tasks_0627.json
 │       └── test_label.json
-├── docs/                       # Project documentation
-│   └── datasets.md            # Dataset details
 ├── experiments/                # Training outputs and logs (gitignored)
 │   └── runs/
 │       ├── tusimple_full/
@@ -353,11 +357,10 @@ laneatt-classproject/
 │       ├── experiments/       # Training checkpoints (gitignored)
 │       ├── tensorboard/       # TensorBoard logs (gitignored)
 │       └── wandb/             # WandB logs (gitignored)
-├── scripts/
-│   └── clean_env.sh           # Clean and rebuild Poetry environment
 ├── src/
 │   ├── train.py               # ⭐ Training wrapper script
 │   └── create_subset_data.py  # ⭐ Create smaller dataset subsets
+├── run_all_models.sh          # ⭐ Batch training script
 ├── pyproject.toml             # Poetry dependencies
 └── README.md
 
@@ -672,7 +675,6 @@ poetry run tensorboard --logdir external/LaneATT/tensorboard
 
 ## Documentation
 
-- [`docs/datasets.md`](docs/datasets.md) - Dataset details and evaluation metrics
 - [`external/LaneATT/README.md`](external/LaneATT/README.md) - Original LaneATT documentation
 - [`external/LaneATT/DATASETS.md`](external/LaneATT/DATASETS.md) - LaneATT dataset setup guide
 
