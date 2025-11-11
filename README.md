@@ -234,23 +234,9 @@ python main.py test --exp_name tusimple_resnet18 --epoch 70
 cd ../..
 ```
 
-### Training Options
+### WandB Integration
 
-Train on the full TuSimple dataset with the custom train/val split:
-
-```bash
-poetry run python src/train.py --config configs/tusimple_full.yaml
-```
-
-Or for quick debugging (2 epochs only):
-
-```bash
-poetry run python src/train.py --config configs/tusimple_debug.yaml
-```
-
-### Training Options
-
-**WandB Integration:**
+**Enable experiment tracking:**
 ```bash
 # First time only: Login to WandB
 poetry run python -c "import wandb; wandb.login()"
