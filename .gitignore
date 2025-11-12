@@ -17,6 +17,10 @@ training_logs/
 tensorboard/
 wandb/
 
+# Testing
+test_configs.py
+test_*.log
+
 # OS/editor
 .DS_Store
 .vscode/

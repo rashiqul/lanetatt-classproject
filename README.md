@@ -194,7 +194,7 @@ Then update your LaneATT config file to point to these smaller datasets.
 
 **Train a single model:**
 ```bash
-poetry run python src/train.py --config configs/tusimple_full.yaml
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml
 ```
 
 **Train all ResNet models (18, 34, 122) sequentially:**
@@ -206,17 +206,18 @@ bash run_all_models.sh
 
 **Method 1: Class Project Wrapper** (Recommended for single models)
 ```bash
-# Basic training
-poetry run python src/train.py --config configs/tusimple_full.yaml
+# Basic training (ResNet-34)
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml
 
 # With WandB logging
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --wandb
 
 # Override epochs
-poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --epochs 50
 
-# Quick debug (2 epochs)
-poetry run python src/train.py --config configs/tusimple_debug.yaml
+# Use different backbone (ResNet-18 or ResNet-122)
+poetry run python src/train.py --config configs/tusimple_resnet18.yaml --wandb
+poetry run python src/train.py --config configs/tusimple_resnet122.yaml --wandb
 ```
 
 **Method 2: Batch Training** (For running all models overnight)
@@ -242,14 +243,14 @@ cd ../..
 poetry run python -c "import wandb; wandb.login()"
 
 # Enable WandB logging during training
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --wandb
 ```
 
 ### What Happens During Training
 
 The training script (`src/train.py`):
-1. Loads your config from the specified YAML file (e.g., `configs/tusimple_full.yaml`)
-2. Identifies the LaneATT config to use (e.g., `laneatt_tusimple_split_resnet18.yml`)
+1. Loads your config from the specified YAML file (e.g., `configs/tusimple_resnet34.yaml`)
+2. Identifies the LaneATT config to use (e.g., `laneatt_tusimple_resnet34.yml`)
 3. Optionally overrides epochs if `--epochs` is specified
 4. Calls the LaneATT training script (`external/LaneATT/main.py`) with appropriate parameters
 5. Saves checkpoints and logs to `experiments/runs/<experiment_name>/`
@@ -269,14 +270,15 @@ poetry run tensorboard --logdir external/LaneATT/tensorboard
 ### Configuration Files
 
 - **Project configs** (`configs/`):
-  - [`configs/tusimple_full.yaml`](configs/tusimple_full.yaml) - Full training (100 epochs, batch size 8)
-  - [`configs/tusimple_debug.yaml`](configs/tusimple_debug.yaml) - Debug config (2 epochs, batch size 4)
-  - [`configs/culane_debug.yaml`](configs/culane_debug.yaml) - CULane debug config
-  - [`configs/paths.yaml`](configs/paths.yaml) - Dataset paths (currently unused)
+  - [`configs/tusimple_resnet18.yaml`](configs/tusimple_resnet18.yaml) - ResNet-18 (100 epochs, batch size 8)
+  - [`configs/tusimple_resnet34.yaml`](configs/tusimple_resnet34.yaml) - ResNet-34 (100 epochs, batch size 8)
+  - [`configs/tusimple_resnet122.yaml`](configs/tusimple_resnet122.yaml) - ResNet-122 (100 epochs, batch size 4)
 
 - **LaneATT configs** (`external/LaneATT/cfgs/`):
-  - [`laneatt_tusimple_split_resnet18.yml`](external/LaneATT/cfgs/laneatt_tusimple_split_resnet18.yml) - Custom train/val split config
-  - Other original LaneATT configs for different datasets and backbones
+  - [`laneatt_tusimple_resnet18.yml`](external/LaneATT/cfgs/laneatt_tusimple_resnet18.yml) - LaneATT ResNet-18 config
+  - [`laneatt_tusimple_resnet34.yml`](external/LaneATT/cfgs/laneatt_tusimple_resnet34.yml) - LaneATT ResNet-34 config
+  - [`laneatt_tusimple_resnet122.yml`](external/LaneATT/cfgs/laneatt_tusimple_resnet122.yml) - LaneATT ResNet-122 config
+  - Other original LaneATT configs for different datasets (CULane, LLAMAS)
 
 ---
 
@@ -338,10 +340,9 @@ Our fork includes several enhancements to the original LaneATT implementation:
 ```
 laneatt-classproject/
 ├── configs/                                          # Training configurations
-│   ├── tusimple_full.yaml                            # Full training config (100 epochs)
-│   ├── tusimple_debug.yaml                           # Debug config (2 epochs)
-│   ├── culane_debug.yaml                             # CULane debug config
-│   └── paths.yaml                                    # Dataset paths
+│   ├── tusimple_resnet18.yaml                        # ResNet-18 config (100 epochs)
+│   ├── tusimple_resnet34.yaml                        # ResNet-34 config (100 epochs)
+│   └── tusimple_resnet122.yaml                       # ResNet-122 config (100 epochs)
 ├── datasets/                                         # Actual datasets (gitignored, ~20GB)
 │   ├── tusimple/                                     # Training data + train/val split
 │   │   ├── clips/                                    # Images organized by date
@@ -350,14 +351,15 @@ laneatt-classproject/
 │   │   ├── label_data_0601.json
 │   │   ├── label_data_train.json                     # Train split (0313 + 0531)
 │   │   └── label_data_val.json                       # Val split (0601)
-│   └── tusimple-test/                                # Test data
+│   └── tusimple-test/                                # Test data (optional)
 │       ├── clips/
 │       ├── test_tasks_0627.json
 │       └── test_label.json
 ├── experiments/                                      # Training outputs and logs (gitignored)
 │   └── runs/
-│       ├── tusimple_full/
-│       └── tusimple_debug/
+│       ├── tusimple_resnet18/
+│       ├── tusimple_resnet34/
+│       └── tusimple_resnet122/
 ├── external/
 │   └── LaneATT/                                     # LaneATT submodule (our fork)
 │       ├── main.py                                  # LaneATT training/testing entry point
@@ -461,13 +463,13 @@ cd ../../../..
 
 ```bash
 # Train for 100 epochs with ResNet-18 backbone
-poetry run python src/train.py --config configs/tusimple_full.yaml
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml
 
 # With WandB logging enabled (optional)
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --wandb
 
 # Override epochs (e.g., train for 50 epochs instead)
-poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --epochs 50
 ```
 
 **Expected training time**: ~6-8 hours on NVIDIA Quadro T1000 for 100 epochs
@@ -492,10 +494,10 @@ poetry run tensorboard --logdir external/LaneATT/tensorboard
 **Check training outputs:**
 ```bash
 # Checkpoints and model weights
-ls external/LaneATT/experiments/tusimple_full/
+ls external/LaneATT/experiments/tusimple_resnet34/
 
 # Training logs
-cat external/LaneATT/experiments/tusimple_full/*.log
+cat external/LaneATT/experiments/tusimple_resnet34/*.log
 ```
 
 ### Step 6: Evaluate Model
@@ -506,10 +508,10 @@ After training completes, evaluate on the test set:
 cd external/LaneATT
 
 # Evaluate the best checkpoint (typically the last epoch)
-poetry run python main.py test --exp_name tusimple_full
+poetry run python main.py test --exp_name tusimple_resnet34
 
 # Visualize predictions (creates output images)
-poetry run python main.py test --exp_name tusimple_full --view all
+poetry run python main.py test --exp_name tusimple_resnet34 --view all
 
 cd ../..
 ```
@@ -517,9 +519,9 @@ cd ../..
 ### Step 7: View Results
 
 Results are saved to:
-- **Metrics**: `external/LaneATT/experiments/tusimple_full/test_results.json`
-- **Predictions**: `external/LaneATT/experiments/tusimple_full/tusimple_predictions.json`
-- **Visualizations** (if --view all): `external/LaneATT/experiments/tusimple_full/visualization/`
+- **Metrics**: `external/LaneATT/experiments/tusimple_resnet34/test_results.json`
+- **Predictions**: `external/LaneATT/experiments/tusimple_resnet34/tusimple_predictions.json`
+- **Visualizations** (if --view all): `external/LaneATT/experiments/tusimple_resnet34/visualization/`
 
 **Expected results** (on TuSimple test set):
 - Accuracy: ~95.5%
@@ -621,8 +623,8 @@ If WandB asks for login during training and you don't want to use it:
 poetry run wandb offline
 
 # Or use --wandb flag only when you want logging
-poetry run python src/train.py --config configs/tusimple_full.yaml  # WandB disabled
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb  # WandB enabled
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml  # WandB disabled
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --wandb  # WandB enabled
 ```
 
 ---
@@ -633,21 +635,21 @@ poetry run python src/train.py --config configs/tusimple_full.yaml --wandb  # Wa
 
 ```bash
 # Train full model (100 epochs)
-poetry run python src/train.py --config configs/tusimple_full.yaml
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml
 
 # Quick debug run (2 epochs)
 poetry run python src/train.py --config configs/tusimple_debug.yaml
 
 # Train with custom epochs
-poetry run python src/train.py --config configs/tusimple_full.yaml --epochs 50
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --epochs 50
 
 # Train with WandB logging
-poetry run python src/train.py --config configs/tusimple_full.yaml --wandb
+poetry run python src/train.py --config configs/tusimple_resnet34.yaml --wandb
 
 # Evaluate trained model
 cd external/LaneATT
-poetry run python main.py test --exp_name tusimple_full
-poetry run python main.py test --exp_name tusimple_full --view all  # with visualization
+poetry run python main.py test --exp_name tusimple_resnet34
+poetry run python main.py test --exp_name tusimple_resnet34 --view all  # with visualization
 cd ../..
 
 # Create smaller dataset subset

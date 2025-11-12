@@ -62,38 +62,38 @@ case "$EXPERIMENT" in
         echo "Running ALL experiments (this will take a while!)"
         
         # ResNet-18 experiments
-        run_experiment "tusimple_resnet18_full" "configs/tusimple_full.yaml" 100
+        run_experiment "tusimple_resnet18" "configs/tusimple_resnet18.yaml" 100
         
         # ResNet-34 experiments
-        run_experiment "tusimple_resnet34_full" "configs/tusimple_full.yaml" 100
+        run_experiment "tusimple_resnet34" "configs/tusimple_resnet34.yaml" 100
         
         # ResNet-122 experiments (if you want to try)
-        # run_experiment "tusimple_resnet122_full" "configs/tusimple_full.yaml" 100
+        # run_experiment "tusimple_resnet122" "configs/tusimple_resnet122.yaml" 100
         ;;
         
     "resnet18")
         echo "Running ResNet-18 experiments"
-        run_experiment "tusimple_resnet18_full" "configs/tusimple_full.yaml" 100
+        run_experiment "tusimple_resnet18" "configs/tusimple_resnet18.yaml" 100
         ;;
         
     "resnet34")
         echo "Running ResNet-34 experiments"
-        run_experiment "tusimple_resnet34_full" "configs/tusimple_full.yaml" 100
+        run_experiment "tusimple_resnet34" "configs/tusimple_resnet34.yaml" 100
         ;;
         
     "resnet122")
         echo "Running ResNet-122 experiments"
-        run_experiment "tusimple_resnet122_full" "configs/tusimple_full.yaml" 100
+        run_experiment "tusimple_resnet122" "configs/tusimple_resnet122.yaml" 100
         ;;
         
     "fast")
-        echo "Running FAST experiments (ResNet-18, fewer epochs)"
-        run_experiment "tusimple_resnet18_fast" "configs/tusimple_debug.yaml" 50
+        echo "Running FAST experiments (ResNet-18, 50 epochs)"
+        run_experiment "tusimple_resnet18_fast" "configs/tusimple_resnet18.yaml" 50
         ;;
         
     "debug")
-        echo "Running DEBUG experiments (2 epochs)"
-        run_experiment "tusimple_debug" "configs/tusimple_debug.yaml" 2
+        echo "Running DEBUG experiments (ResNet-18, 2 epochs)"
+        run_experiment "tusimple_resnet18_debug" "configs/tusimple_resnet18.yaml" 2
         ;;
         
     *)
