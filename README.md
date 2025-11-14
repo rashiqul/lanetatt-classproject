@@ -192,15 +192,27 @@ Then update your LaneATT config file to point to these smaller datasets.
 
 ### Quick Start
 
-**Train a single model:**
+**Train individual models:**
 ```bash
-poetry run python src/train.py --config configs/tusimple_resnet34.yaml
+# ResNet-18 (fastest)
+cd external/LaneATT
+poetry run python main.py train --exp_name tusimple_resnet18 --cfg cfgs/laneatt_tusimple_resnet18.yml
+
+# ResNet-34 (balanced)
+poetry run python main.py train --exp_name tusimple_resnet34 --cfg cfgs/laneatt_tusimple_resnet34.yml
+
+# ResNet-122 (most accurate)
+poetry run python main.py train --exp_name tusimple_resnet122 --cfg cfgs/laneatt_tusimple_resnet122.yml
+
+cd ../..
 ```
 
 **Train all ResNet models (18, 34, 122) sequentially:**
 ```bash
 bash run_all_models.sh
 ```
+
+This batch script runs all three models overnight and logs everything to `training_logs/`.
 
 ### Execution Methods
 
