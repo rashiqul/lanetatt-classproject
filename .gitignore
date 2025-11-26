@@ -2,9 +2,36 @@ __pycache__/
 *.pyc
 .venv/
 env/
+
 # Logs / outputs
 experiments/
+training_logs/
+*.log
+
+# Model weights and checkpoints
 *.pt
+*.pth
+*.ckpt
+
+# Tracking and monitoring
+tensorboard/
+wandb/
+
+# Testing
+test_configs.py
+test_*.log
+
 # OS/editor
 .DS_Store
 .vscode/
+
+# Data
+data/
+experiments/runs/
+.notebooks/
+
+# Build artifacts
+*.so
+build/
+dist/
+*.egg-info/
