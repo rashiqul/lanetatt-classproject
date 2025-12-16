@@ -221,15 +221,17 @@ poetry run python visualize_custom.py \
 
 **With dataset (Methods 1-3):**
 - ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
-- ✅ Config file: `cfgs/laneatt_tusimple_resnet18.yml` **(already present)**
+- ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
+- ✅ Anchor frequency files: `data/*_anchors_freq.pt` **(already included)**
 - ✅ Test dataset: `/path/to/tusimple/test_set/` **(10-50 GB download)**
 
-**Without dataset (Method 4):** ⭐ **Easiest option**
-- ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
-- ✅ Config file: `cfgs/laneatt_tusimple_resnet18.yml` **(already present)**
+**Without dataset (Method 4):** ⭐ **Easiest option - Verified Working!**
+- ✅ Model checkpoint: `model_XXX.pt` **(get from team member - 138-254 MB)**
+- ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
+- ✅ Anchor frequency files: `data/culane_anchors_freq.pt` **(already included)**
 - ✅ Your own images: Any `.jpg`, `.png` road images **(no download needed!)**
 
-> 💡 **Tip**: If a team member has trained a model, ask them for the `model_XXX.pt` file (50-200 MB). You can visualize results on your own images without downloading datasets!
+> 💡 **Tested**: Successfully loaded and ran inference with CULane ResNet18 (138MB) and ResNet34 (254MB) models. Just need the `.pt` checkpoint file!
 
 ### Working with Pre-trained Models
 
@@ -278,8 +280,13 @@ poetry run python main.py test --exp_name received_model --epoch 100 --view
 This project integrates changes from multiple sources:
 
 1. **Base:** lucastabelini/LaneATT (original implementation)
-2. **Integrated:** zhoubozhen/LaneATT (CuLane optimizations)
+2. **Integrated:** zhoubozhen/LaneATT (CuLane optimizations + anchor files)
 3. **Current Fork:** rashiqul/LaneATT (merged improvements)
+
+**Important Files from Integration:**
+- CULane/LLAMAS anchor frequency files (`data/*_anchors_freq.pt`)
+- DataLoader optimizations (16 workers, pin_memory, etc.)
+- Experiment tracking with TensorBoard
 
 Branch: `integrate-zhoubozhen-culane` contains all integrated changes.
 
