@@ -217,21 +217,29 @@ poetry run python visualize_custom.py \
 - `--no-display`: Save only, don't show images
 - `--thickness 3`: Line thickness
 
+### Pre-trained Models Available
+
+**CULane Models** (stored locally, not in git due to size):
+- **ResNet18**: `external/LaneATT/experiments/culane_resnet18_pretrained/models/model_15.pt` (138MB)
+- **ResNet34**: `external/LaneATT/experiments/culane_resnet34_pretrained/models/model_15.pt` (254MB)
+
+These models were trained by team members and are stored locally for visualization and testing.
+
 ### Required Files for Visualization
 
 **With dataset (Methods 1-3):**
-- ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
+- ✅ Model checkpoint: `experiments/culane_resnet18_pretrained/models/model_15.pt` **(already saved locally)**
 - ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
 - ✅ Anchor frequency files: `data/*_anchors_freq.pt` **(already included)**
 - ✅ Test dataset: `/path/to/tusimple/test_set/` **(10-50 GB download)**
 
 **Without dataset (Method 4):** ⭐ **Easiest option - Verified Working!**
-- ✅ Model checkpoint: `model_XXX.pt` **(get from team member - 138-254 MB)**
+- ✅ Model checkpoint: **(already saved locally - see above)**
 - ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
 - ✅ Anchor frequency files: `data/culane_anchors_freq.pt` **(already included)**
 - ✅ Your own images: Any `.jpg`, `.png` road images **(no download needed!)**
 
-> 💡 **Tested**: Successfully loaded and ran inference with CULane ResNet18 (138MB) and ResNet34 (254MB) models. Just need the `.pt` checkpoint file!
+> 💡 **Ready to use**: Pre-trained CULane models are saved in the experiments directory. Use them directly for visualization!
 
 ### Working with Pre-trained Models
 
