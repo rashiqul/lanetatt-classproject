@@ -217,13 +217,22 @@ poetry run python visualize_custom.py \
 - `--no-display`: Save only, don't show images
 - `--thickness 3`: Line thickness
 
-### Pre-trained Models Available
+### Pre-trained Models
 
-**CULane Models** (stored locally, not in git due to size):
-- **ResNet18**: `external/LaneATT/experiments/culane_resnet18_pretrained/models/model_15.pt` (138MB)
-- **ResNet34**: `external/LaneATT/experiments/culane_resnet34_pretrained/models/model_15.pt` (254MB)
+**CULane Models** (not stored in git due to size):
+- **ResNet18**: Place in `external/LaneATT/experiments/culane_resnet18_pretrained/models/model_15.pt` (138MB)
+- **ResNet34**: Place in `external/LaneATT/experiments/culane_resnet34_pretrained/models/model_15.pt` (254MB)
 
-These models were trained by team members and are stored locally for visualization and testing.
+**To obtain models:**
+1. Get model weights from team member training runs
+2. Create experiment directories:
+   ```bash
+   mkdir -p external/LaneATT/experiments/culane_resnet{18,34}_pretrained/models
+   ```
+3. Place `model_15.pt` files in respective directories
+4. Copy corresponding config YAML files to each experiment root
+
+**Note:** Model weights are gitignored to avoid repository bloat. Consider using Git LFS or cloud storage for sharing.
 
 ### Required Files for Visualization
 
