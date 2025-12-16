@@ -71,8 +71,14 @@ Examples:
     return parser.parse_args()
 
 
-def preprocess_image(img_path, target_size):
-    """Load and preprocess image for model input."""
+def preprocess_image(img_path, target_size, normalize=False):
+    """Load and preprocess image for model input.
+    
+    Args:
+        img_path: Path to image
+        target_size: (width, height) tuple for cv2.resize
+        normalize: If True, apply ImageNet normalization. If False, just scale to [0, 1]
+    """
     img = cv2.imread(str(img_path))
     if img is None:
         raise ValueError(f"Could not read image: {img_path}")
@@ -83,14 +89,15 @@ def preprocess_image(img_path, target_size):
     # Resize to model input size
     img_resized = cv2.resize(img, target_size)
     
-    # Convert to RGB and normalize
+    # Convert to RGB
     img_rgb = cv2.cvtColor(img_resized, cv2.COLOR_BGR2RGB)
     img_normalized = img_rgb.astype(np.float32) / 255.0
     
-    # Apply ImageNet normalization
-    mean = np.array([0.485, 0.456, 0.406])
-    std = np.array([0.229, 0.224, 0.225])
-    img_normalized = (img_normalized - mean) / std
+    # Apply ImageNet normalization only if specified
+    if normalize:
+        mean = np.array([0.485, 0.456, 0.406])
+        std = np.array([0.229, 0.224, 0.225])
+        img_normalized = (img_normalized - mean) / std
     
     # Convert to tensor: (H, W, C) -> (C, H, W)
     img_tensor = torch.from_numpy(img_normalized.transpose(2, 0, 1)).float()
@@ -190,11 +197,13 @@ def main():
     model.eval()
     model = model.to(device)
     
-    # Get test parameters
+    # Get test parameters and normalization setting
     test_params = cfg.get_test_parameters()
+    normalize = cfg['datasets']['train']['parameters'].get('normalize', False)
     
     print(f"\nProcessing {len(args.images)} images...")
     print(f"Model input size: {img_size[1]}x{img_size[0]}")
+    print(f"Normalization: {'ImageNet' if normalize else 'Scale to [0,1]'}")
     print(f"Confidence threshold: {args.conf_threshold}")
     print(f"Device: {device}\n")
     
@@ -207,13 +216,18 @@ def main():
                 continue
             
             try:
-                # Preprocess
-                img_tensor, original_img, original_size = preprocess_image(img_path, target_size)
+                # Preprocess (use normalize flag from config)
+                img_tensor, original_img, original_size = preprocess_image(img_path, target_size, normalize=normalize)
                 img_tensor = img_tensor.to(device)
                 
                 # Run inference
                 output = model(img_tensor, **test_params)
                 predictions = model.decode(output, as_lanes=True)[0]  # Get first batch item
+                
+                # Debug: Show raw predictions
+                if predictions:
+                    confidences = [lane.metadata.get('conf', 0) for lane in predictions if hasattr(lane, 'metadata')]
+                    print(f"  {img_path.name}: {len(predictions)} raw predictions, conf range: {min(confidences):.3f}-{max(confidences):.3f}")
                 
                 # Filter by confidence
                 filtered_preds = [
