@@ -35,3 +35,4 @@ experiments/runs/
 build/
 dist/
 *.egg-info/temp/
+results/
