@@ -143,12 +143,19 @@ def draw_lanes_on_image(img, lanes, target_size, original_size, thickness=3, con
 def main():
     args = parse_args()
     
-    # Setup output directory
+    # Convert paths to absolute before changing directory
+    original_dir = os.getcwd()
+    args.model = str(Path(args.model).resolve())
+    args.images = [str(Path(img).resolve()) for img in args.images]
     if args.output:
+        args.output = str(Path(args.output).resolve())
         output_dir = Path(args.output)
         output_dir.mkdir(parents=True, exist_ok=True)
     
-    # Load config
+    # Change to LaneATT directory so relative paths in config work
+    os.chdir(LANEATT_DIR)
+    
+    # Load config (now relative paths in config will work)
     print(f"Loading config from {args.cfg}...")
     cfg = Config(args.cfg)
     
@@ -166,9 +173,19 @@ def main():
     
     # Handle different checkpoint formats
     if isinstance(checkpoint, dict) and 'model' in checkpoint:
-        model.load_state_dict(checkpoint['model'])
+        try:
+            model.load_state_dict(checkpoint['model'])
+        except RuntimeError as e:
+            print(f"Warning: {e}")
+            print("Attempting to load with strict=False...")
+            model.load_state_dict(checkpoint['model'], strict=False)
     else:
-        model.load_state_dict(checkpoint)
+        try:
+            model.load_state_dict(checkpoint)
+        except RuntimeError as e:
+            print(f"Warning: {e}")
+            print("Attempting to load with strict=False...")
+            model.load_state_dict(checkpoint, strict=False)
     
     model.eval()
     model = model.to(device)
