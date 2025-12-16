@@ -25,7 +25,7 @@ else
         cd $SCRIPT_DIR;
         echo '✅ Running from workspace root: $(pwd)';
         echo '🏋️  Starting training for experiment: $EXP_NAME';
-        poetry run python train.py train --exp_name $EXP_NAME --cfg $CFG_PATH;
+        poetry run python scripts/train.py train --exp_name $EXP_NAME --cfg $CFG_PATH;
         echo '✅ Training completed! Press Ctrl+b d to detach if attached.';
         exec bash
     "

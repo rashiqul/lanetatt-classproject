@@ -45,7 +45,7 @@ run_experiment() {
     echo "---------------------------------------------------"
     
     # Run with WandB enabled
-    poetry run python src/train.py \
+    poetry run python scripts/train.py \
         --config "$config" \
         --epochs "$epochs" \
         --wandb

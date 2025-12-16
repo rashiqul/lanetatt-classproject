@@ -101,10 +101,10 @@ You can now run training directly from the project workspace:
 
 ```bash
 # Simple training command
-poetry run python train.py train --exp_name my_experiment --cfg external/LaneATT/cfgs/laneatt_tusimple_resnet18.yml
+poetry run python scripts/train.py train --exp_name my_experiment --cfg external/LaneATT/cfgs/laneatt_tusimple_resnet18.yml
 
 # Or use the convenience script with tmux
-./train_laneatt.sh
+./scripts/train_laneatt.sh
 ```
 
 ### Command Line Examples
@@ -113,16 +113,16 @@ poetry run python train.py train --exp_name my_experiment --cfg external/LaneATT
 poetry run python train.py train --exp_name tusimple_test --cfg cfgs/laneatt_tusimple_resnet18.yml
 
 # Train on CuLane dataset (ResNet18 backbone)
-poetry run python train.py train --exp_name culane_test --cfg cfgs/laneatt_culane_resnet18.yml
+poetry run python scripts/train.py train --exp_name culane_test --cfg cfgs/laneatt_culane_resnet18.yml
 
 # Train with different backbones
-poetry run python train.py train --exp_name culane_resnet34 --cfg cfgs/laneatt_culane_resnet34.yml
+poetry run python scripts/train.py train --exp_name culane_resnet34 --cfg cfgs/laneatt_culane_resnet34.yml
 
 # Test/evaluate a trained model
-poetry run python train.py test --exp_name tusimple_test --epoch 15
+poetry run python scripts/train.py test --exp_name tusimple_test --epoch 15
 
 # Resume training from checkpoint
-poetry run python train.py train --exp_name tusimple_test --cfg cfgs/laneatt_tusimple_resnet18.yml --resume
+poetry run python scripts/train.py train --exp_name tusimple_test --cfg cfgs/laneatt_tusimple_resnet18.yml --resume
 ```
 
 ### Configuration Files
@@ -205,7 +205,7 @@ poetry run python utils/viz_dataset.py \
 Run inference on your own road images:
 
 ```bash
-poetry run python visualize_custom.py \
+poetry run python scripts/visualize_custom.py \
     --model external/LaneATT/experiments/my_exp/models/model_100.pt \
     --cfg external/LaneATT/cfgs/laneatt_tusimple_resnet18.yml \
     --images my_image1.jpg my_image2.jpg \
@@ -270,9 +270,12 @@ poetry run python main.py test --exp_name received_model --epoch 100 --view
 
 ```
 .
-├── train.py                    # Main training entry point (workspace-level)
-├── visualize_custom.py         # Inference on custom images (no dataset needed)
-├── train_laneatt.sh           # Training script with tmux support
+├── scripts/
+│   ├── train.py                # Main training entry point (workspace-level)
+│   ├── visualize_custom.py     # Inference on custom images (no dataset needed)
+│   ├── train_laneatt.sh        # Training script with tmux support
+│   ├── run_all_models.sh       # Batch model execution
+│   └── ...                     # Other utility scripts
 ├── pyproject.toml             # Poetry dependencies
 ├── poetry.lock                # Locked dependency versions
 ├── README.md                  # This file

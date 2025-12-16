@@ -34,5 +34,6 @@ experiments/runs/
 *.so
 build/
 dist/
-*.egg-info/temp/
+*.egg-info/
+temp/
 results/
