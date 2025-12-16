@@ -1,4 +1,4 @@
 [submodule "external/LaneATT"]
-    path = external/LaneATT
-    url = git@github.com:rashiqul/LaneATT.git
-    branch = integrate-bozhen-changes
+	path = external/LaneATT
+	url = https://github.com/rashiqul/LaneATT
+	branch = main
