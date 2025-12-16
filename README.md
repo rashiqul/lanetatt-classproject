@@ -149,11 +149,112 @@ pip install --upgrade --index-url https://download.pytorch.org/whl/cu121 torch==
 python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 ```
 
+## Visualization
+
+LaneATT provides several ways to visualize predictions like those shown in the paper (blue=ground truth, green=correct predictions, red=false positives).
+
+### Method 1: Live Visualization During Testing
+
+View predictions in real-time (press any key for next image):
+
+```bash
+cd external/LaneATT
+poetry run python main.py test \
+    --exp_name my_experiment \
+    --cfg cfgs/laneatt_tusimple_resnet18.yml \
+    --epoch 100 \
+    --view
+```
+
+### Method 2: Generate Video from Predictions
+
+Generate predictions once, then create videos:
+
+```bash
+cd external/LaneATT
+
+# Step 1: Generate predictions.pkl
+poetry run python main.py test --exp_name my_experiment --epoch 100
+
+# Step 2: Create video
+poetry run python utils/gen_video.py \
+    --pred predictions.pkl \
+    --cfg cfgs/laneatt_tusimple_resnet18.yml \
+    --out results_video.avi \
+    --fps 10
+```
+
+**Options:**
+- `--view`: Show interactively instead of saving video
+- `--length 30 --clips 5`: Create 30-second video with 5 clips
+- `--legend legend.png`: Add legend overlay
+
+### Method 3: Visualize Ground Truth Dataset
+
+View dataset annotations without a trained model:
+
+```bash
+cd external/LaneATT
+poetry run python utils/viz_dataset.py \
+    --cfg cfgs/laneatt_tusimple_resnet18.yml \
+    --split test
+```
+
+### Method 4: Custom Images (No Dataset Required)
+
+Run inference on your own road images:
+
+```bash
+poetry run python visualize_custom.py \
+    --model external/LaneATT/experiments/my_exp/models/model_100.pt \
+    --cfg external/LaneATT/cfgs/laneatt_tusimple_resnet18.yml \
+    --images my_image1.jpg my_image2.jpg \
+    --output results/
+```
+
+**Options:**
+- `--conf-threshold 0.5`: Filter predictions by confidence
+- `--no-display`: Save only, don't show images
+- `--thickness 3`: Line thickness
+
+### Required Files for Visualization
+
+**With dataset (Methods 1-3):**
+- ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
+- ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
+- ✅ Anchor frequency files: `data/*_anchors_freq.pt` **(already included)**
+- ✅ Test dataset: `/path/to/tusimple/test_set/` **(10-50 GB download)**
+
+**Without dataset (Method 4):** ⭐ **Easiest option - Verified Working!**
+- ✅ Model checkpoint: `model_XXX.pt` **(get from team member - 138-254 MB)**
+- ✅ Config file: `cfgs/laneatt_culane_resnet18.yml` **(already present)**
+- ✅ Anchor frequency files: `data/culane_anchors_freq.pt` **(already included)**
+- ✅ Your own images: Any `.jpg`, `.png` road images **(no download needed!)**
+
+> 💡 **Tested**: Successfully loaded and ran inference with CULane ResNet18 (138MB) and ResNet34 (254MB) models. Just need the `.pt` checkpoint file!
+
+### Working with Pre-trained Models
+
+If you received a trained model:
+
+```bash
+# 1. Create experiment directory
+mkdir -p external/LaneATT/experiments/received_model/models
+
+# 2. Place model checkpoint
+cp /path/to/model.pt external/LaneATT/experiments/received_model/models/model_100.pt
+
+# 3. Test with visualization
+cd external/LaneATT
+poetry run python main.py test --exp_name received_model --epoch 100 --view
+```
+
 ## Project Structure
 
 ```
 .
 ├── train.py                    # Main training entry point (workspace-level)
+├── visualize_custom.py         # Inference on custom images (no dataset needed)
 ├── train_laneatt.sh           # Training script with tmux support
 ├── pyproject.toml             # Poetry dependencies
 ├── poetry.lock                # Locked dependency versions
@@ -167,6 +268,9 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
         │   ├── models/        # Model architectures
         │   ├── datasets/      # Dataset loaders
         │   └── nms/           # CUDA NMS extension
+        ├── utils/
+        │   ├── gen_video.py   # Generate visualization videos
+        │   └── viz_dataset.py # Visualize dataset ground truth
         ├── experiments/       # Training outputs (checkpoints, logs)
         └── wandb/             # WandB experiment tracking
 ```
@@ -176,8 +280,13 @@ python -c "import torch; print(torch.__version__, torch.cuda.is_available())"
 This project integrates changes from multiple sources:
 
 1. **Base:** lucastabelini/LaneATT (original implementation)
-2. **Integrated:** zhoubozhen/LaneATT (CuLane optimizations)
+2. **Integrated:** zhoubozhen/LaneATT (CuLane optimizations + anchor files)
 3. **Current Fork:** rashiqul/LaneATT (merged improvements)
+
+**Important Files from Integration:**
+- CULane/LLAMAS anchor frequency files (`data/*_anchors_freq.pt`)
+- DataLoader optimizations (16 workers, pin_memory, etc.)
+- Experiment tracking with TensorBoard
 
 Branch: `integrate-zhoubozhen-culane` contains all integrated changes.
 
