@@ -220,14 +220,16 @@ poetry run python visualize_custom.py \
 ### Required Files for Visualization
 
 **With dataset (Methods 1-3):**
-- Model checkpoint: `experiments/my_exp/models/model_100.pt`
-- Config file: `cfgs/laneatt_tusimple_resnet18.yml`
-- Test dataset: `/path/to/tusimple/test_set/`
+- ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
+- ✅ Config file: `cfgs/laneatt_tusimple_resnet18.yml` **(already present)**
+- ✅ Test dataset: `/path/to/tusimple/test_set/` **(10-50 GB download)**
 
-**Without dataset (Method 4):**
-- Model checkpoint: `experiments/my_exp/models/model_100.pt`
-- Config file: `cfgs/laneatt_tusimple_resnet18.yml`
-- Your own images: Any `.jpg`, `.png` road images
+**Without dataset (Method 4):** ⭐ **Easiest option**
+- ✅ Model checkpoint: `experiments/my_exp/models/model_100.pt` **(get from team member)**
+- ✅ Config file: `cfgs/laneatt_tusimple_resnet18.yml` **(already present)**
+- ✅ Your own images: Any `.jpg`, `.png` road images **(no download needed!)**
+
+> 💡 **Tip**: If a team member has trained a model, ask them for the `model_XXX.pt` file (50-200 MB). You can visualize results on your own images without downloading datasets!
 
 ### Working with Pre-trained Models
 
