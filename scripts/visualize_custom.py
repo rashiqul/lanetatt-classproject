@@ -21,7 +21,9 @@ import torch
 from tqdm import tqdm
 
 # Add LaneATT lib to path
-LANEATT_DIR = Path(__file__).parent / "external" / "LaneATT"
+SCRIPT_DIR = Path(__file__).parent
+WORKSPACE_ROOT = SCRIPT_DIR.parent
+LANEATT_DIR = WORKSPACE_ROOT / "external" / "LaneATT"
 sys.path.insert(0, str(LANEATT_DIR))
 
 from lib.config import Config
@@ -152,6 +154,7 @@ def main():
     
     # Convert paths to absolute before changing directory
     original_dir = os.getcwd()
+    args.cfg = str(Path(args.cfg).resolve())
     args.model = str(Path(args.model).resolve())
     args.images = [str(Path(img).resolve()) for img in args.images]
     if args.output:
